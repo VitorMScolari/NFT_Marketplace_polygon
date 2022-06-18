@@ -1,5 +1,5 @@
 # Website currently hosted at:
-## [Project Link](https://vitormscolari.github.io/VMS_Marketplace/)
+## [VMS Marketplace](https://vitormscolari.github.io/VMS_Marketplace/)
 
 # Celo React Boilerplate
 This repository contains a simple React boilerplate for Celo projects.
