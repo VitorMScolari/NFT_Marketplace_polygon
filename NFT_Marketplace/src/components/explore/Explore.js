@@ -12,8 +12,6 @@ import { RingLoader } from "react-spinners";
 import './Explore.css';
 
 
-
-
 const Explore = () => {
     // to keep track of all NFTs to map over later
     const [nfts, setNfts] = useState([]);

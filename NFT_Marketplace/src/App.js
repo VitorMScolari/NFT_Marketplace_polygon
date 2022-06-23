@@ -5,19 +5,17 @@ import Explore from './components/explore/Explore';
 import Profile from './components/profile/Profile';
 import "./App.css";
 
-
-
 const App = function AppWrapper() {
 
   return (
     <>
       <BrowserRouter basename="/VMS_Marketplace">
-        <Navigation />
-        <Routes>
-          <Route path="/" exact element={<Explore />} />
-          <Route path="/explore" element={<Explore />} />
-          <Route path="/profile" element={<Profile />} />
-        </Routes>
+          <Navigation />
+          <Routes>
+            <Route path="/" exact element={<Explore />} />
+            <Route path="/explore" element={<Explore />} />
+            <Route path="/profile" element={<Profile />} />
+          </Routes>
       </BrowserRouter>
     </>
   );

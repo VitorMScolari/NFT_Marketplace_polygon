@@ -11,9 +11,9 @@ async function main() {
   // deploys NFT contract
   const myNFT = await MyNFT.deploy();
   // abstraction of the marketplace contract
-  const Marketplace = await hre.ethers.getContractFactory("Marketplace");
+  const Marketplace = await hre.ethers.getContractFactory("NftMarketplace");
   // deploys marketplace contract
-  const marketplace = await Marketplace.deploy(1);
+  const marketplace = await Marketplace.deploy();
 
   // wait for contracts to be deployed
   await myNFT.deployed();
