@@ -1,35 +1,40 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import {
-  ContractKitProvider,
-  Alfajores,
-  NetworkNames,
-} from "@celo-tools/use-contractkit";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "@celo-tools/use-contractkit/lib/styles.css";
 import "react-toastify/dist/ReactToastify.min.css";
+import { MoralisDappProvider } from "./providers/MoralisDappProvider/MoralisDappProvider";
+import { MoralisProvider } from "react-moralis";
+
+
+const APP_ID = process.env.MORALIS_PUBLIC_APP_ID;
+const SERVER_URL = process.env.MORALIS_PUBLIC_SERVER_URL;
+
+
+const Application = () => {
+  const isServerInfo = APP_ID && SERVER_URL ? true : false;
+  if (isServerInfo)
+    return (
+      <MoralisProvider appId={APP_ID} serverUrl={SERVER_URL}>
+        <MoralisDappProvider>
+          <App isServerInfo />
+        </MoralisDappProvider>
+      </MoralisProvider>
+    );
+  else {
+    return (
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <QuickStart />
+      </div>
+    );
+  }
+};
 
 ReactDOM.render(
   <React.StrictMode>
-    <ContractKitProvider
-      networks={[Alfajores]}
-      network={{
-        name: NetworkNames.Alfajores,
-        rpcUrl: "https://alfajores-forno.celo-testnet.org",
-        graphQl: "https://alfajores-blockscout.celo-testnet.org/graphiql",
-        explorer: "https://alfajores-blockscout.celo-testnet.org",
-        chainId: 44787,
-      }}
-      dapp={{
-        name: "VMS NFT Marketplace",
-        description: "An NFT Marketplace",
-      }}
-    >
-      <App />
-    </ContractKitProvider>
+      <Application />
   </React.StrictMode>,
   document.getElementById("root")
 );
