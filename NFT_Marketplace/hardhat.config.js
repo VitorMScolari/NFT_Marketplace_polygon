@@ -71,67 +71,48 @@ function mnemonic() {
       // (you can put in a mnemonic here to set the deployer locally)
     },
     rinkeby: {
-      url: `https://rinkeby.infura.io/v3/${process.env.INFURA_ID}`, // <---- YOUR INFURA ID! (or it won't work)
-      //    url: "https://speedy-nodes-nyc.moralis.io/XXXXXXXXXXXXXXXXXXXXXXX/eth/rinkeby", // <---- YOUR MORALIS ID! (not limited to infura)
+      url: `https://rinkeby.infura.io/v3/${process.env.INFURA_ID}`,
       accounts: {
         mnemonic: process.env.MNEMONIC,
       },
     },
     kovan: {
-      url: "https://kovan.infura.io/v3/ec6a8acd1d354717acec099ad46a0bab", // <---- YOUR INFURA ID! (or it won't work)
-      //    url: "https://speedy-nodes-nyc.moralis.io/XXXXXXXXXXXXXXXXXXXXXXX/eth/kovan", // <---- YOUR MORALIS ID! (not limited to infura)
+      url: `https://kovan.infura.io/v3/${process.env.INFURA_ID}`,
       accounts: {
-        mnemonic: '',
+        mnemonic: process.env.MNEMONIC,
       },
     },
     mainnet: {
-      url: "https://mainnet.infura.io/v3/ec6a8acd1d354717acec099ad46a0bab", // <---- YOUR INFURA ID! (or it won't work)
-      //      url: "https://speedy-nodes-nyc.moralis.io/XXXXXXXXXXXXXXXXXXXXXXXXX/eth/mainnet", // <---- YOUR MORALIS ID! (not limited to infura)
+      url: `https://mainnet.infura.io/v3/${process.env.INFURA_ID}`,
       gasPrice: mainnetGwei * 1000000000,
       accounts: {
-        mnemonic: '',
+        mnemonic: process.env.MNEMONIC,
       },
     },
     ropsten: {
-      url: "https://ropsten.infura.io/v3/ec6a8acd1d354717acec099ad46a0bab", // <---- YOUR INFURA ID! (or it won't work)
-      //      url: "https://speedy-nodes-nyc.moralis.io/XXXXXXXXXXXXXXXXXXXXXXXXX/eth/ropsten",// <---- YOUR MORALIS ID! (not limited to infura)
+      url: `https://ropsten.infura.io/v3/${process.env.INFURA_ID}`,
       accounts: {
-        mnemonic: '',
+        mnemonic: process.env.MNEMONIC,
       },
     },
     goerli: {
-      url: "https://goerli.infura.io/v3/ec6a8acd1d354717acec099ad46a0bab", // <---- YOUR INFURA ID! (or it won't work)
-      //      url: "https://speedy-nodes-nyc.moralis.io/XXXXXXXXXXXXXXXXXXXXXXXXX/eth/goerli", // <---- YOUR MORALIS ID! (not limited to infura)
+      url: `https://goerli.infura.io/v3/${process.env.INFURA_ID}`,
       accounts: {
-        mnemonic: '',
-      },
-    },
-    xdai: {
-      url: "https://rpc.xdaichain.com/",
-      gasPrice: 1000000000,
-      accounts: {
-        mnemonic: '',
+        mnemonic: process.env.MNEMONIC,
       },
     },
     polygon: {
-      url: "https://speedy-nodes-nyc.moralis.io/XXXXXXXXXXXXXXXXXXXx/polygon/mainnet", // <---- YOUR MORALIS ID! (not limited to infura)
+      url: "https://polygon-rpc.com/",
       gasPrice: 1000000000,
       accounts: {
-        mnemonic: '',
+        mnemonic: process.env.MNEMONIC,
       },
     },
-    polytest: {
-      url: "https://speedy-nodes-nyc.moralis.io/XXXXXXXXXXXXXXXXXXXXXXX/polygon/mumbai", // <---- YOUR MORALIS ID! (not limited to infura)
-      gasPrice: 1000000000,
-      accounts: {
-        mnemonic: '',
-      },
-    },
-    matic: {
+    mumbai: {
       url: "https://rpc-mainnet.maticvigil.com/",
       gasPrice: 1000000000,
       accounts: {
-        mnemonic: '',
+        mnemonic: process.env.MNEMONIC,
       },
     },
   },
