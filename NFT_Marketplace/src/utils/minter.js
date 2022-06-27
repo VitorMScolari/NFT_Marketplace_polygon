@@ -12,19 +12,17 @@ export const createNft = async (
     price,
     { name, description, exteralUrl, ipfsImage, ownerAddress}
   ) => {
-    await (async (kit) => {
+    await (async () => {
       // require that NFT has a name, description and an image
       if (!name || !description || !ipfsImage) return;
-      // address of the account that is currently connected to the dapp via the wallet.
-      const { defaultAccount } = kit;
-  
+
       // convert NFT metadata to JSON format
       const data = JSON.stringify({
         name,
         description,
         exteralUrl,
         image: ipfsImage,
-        owner: defaultAccount
+        owner: ownerAddress
       });
   
       try {
@@ -38,7 +36,7 @@ export const createNft = async (
         // mint the NFT and save the IPFS url to the blockchain
         let transaction = await minterContract.methods
           .safeMint(ownerAddress, url)
-          .send({ from: defaultAccount });
+          .send({ from: ownerAddress });
 
         console.log(transaction)
 
@@ -48,14 +46,14 @@ export const createNft = async (
         let tokenId = parseInt(value)
 
         // calls function that lists the minted NFT in the marketplace
-        let listing = await createMarketItem(defaultAccount, minterContract, marketContract, price, tokenId);
+        let listing = await createMarketItem(ownerAddress, minterContract, marketContract, price, tokenId);
 
         console.log(listing)
   
       } catch (error) {
         console.log("Error listing NFT: ", error);
       }
-    });
+    })();
 };
 
 

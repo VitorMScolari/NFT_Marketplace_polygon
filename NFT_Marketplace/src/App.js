@@ -9,7 +9,7 @@ const App = function AppWrapper() {
 
   return (
     <>
-      <BrowserRouter basename="/VMS_Marketplace">
+      <BrowserRouter basename="/VMS_Marketplace_polygon">
           <Navigation />
           <Routes>
             <Route path="/" exact element={<Explore />} />

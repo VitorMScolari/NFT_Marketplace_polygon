@@ -6,7 +6,8 @@ export const useContract = (abi, contractAddress, userAddress) => {
   const [contract, setContract] = useState(null);
 
   const getContract = useCallback(async () => {
-    setContract(new ethers.Contract(abi, contractAddress, userAddress));
+    const ct = new ethers.Contract(abi, contractAddress, userAddress);
+    setContract(ct);
   }, [userAddress, abi, contractAddress]);
 
   useEffect(() => {

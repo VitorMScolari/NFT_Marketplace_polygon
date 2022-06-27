@@ -26,26 +26,7 @@ const mnemonic = (variable, optional = false) => {
   return process.env[variable]?.replace(/\\n/gm, '\n')
 }
 
-// Select the network you want to deploy to here:
-//
-const defaultNetwork = "localhost";
-
 const mainnetGwei = 115;
-
-/*
-function mnemonic() {
-  try {
-    return fs.readFileSync("./mnemonic.txt").toString().trim();
-  } catch (e) {
-    if (defaultNetwork !== "localhost") {
-      console.log(
-        "☢️ WARNING: No mnemonic file created for a deploy account. Try `yarn run generate` and then `yarn run account`."
-      );
-    }
-  }
-  return "";
-}
-*/
 
 // You need to export an object to set up your config
 // Go to https://hardhat.org/config/ to learn more
@@ -54,7 +35,7 @@ function mnemonic() {
  * @type import('hardhat/config').HardhatUserConfig
  */
  module.exports = {
-  defaultNetwork,
+  defaultNetwork: "mumbai",
   solidity: "0.8.4",
   networks: {
     alfajores: {
@@ -102,18 +83,16 @@ function mnemonic() {
       },
     },
     polygon: {
-      url: "https://polygon-rpc.com/",
+      url: `https://polygon-mainnet.infura.io/v3/${process.env.INFURA_ID}`,
       gasPrice: 1000000000,
       accounts: {
         mnemonic: process.env.MNEMONIC,
       },
     },
     mumbai: {
-      url: "https://rpc-mainnet.maticvigil.com/",
+      url: "https://rpc-mumbai.maticvigil.com/",
       gasPrice: 1000000000,
-      accounts: {
-        mnemonic: process.env.MNEMONIC,
-      },
+      accounts: [process.env.PRIVATE_KEY],
     },
   },
 };

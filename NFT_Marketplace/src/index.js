@@ -5,45 +5,22 @@ import reportWebVitals from "./reportWebVitals";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-toastify/dist/ReactToastify.min.css";
-import { MoralisDappProvider } from "./providers/MoralisDappProvider/MoralisDappProvider";
-import { MoralisProvider } from "react-moralis";
 import { Web3ReactProvider } from '@web3-react/core'
-import QuickStart from "./components/QuickStart.jsx";
 import Web3 from 'web3'
 
 
-const APP_ID = process.env.MORALIS_PUBLIC_APP_ID;
-const SERVER_URL = process.env.MORALIS_PUBLIC_SERVER_URL;
+// const APP_ID = process.env.MORALIS_PUBLIC_APP_ID;
+// const SERVER_URL = process.env.MORALIS_PUBLIC_SERVER_URL;
 
 function getLibrary(provider) {
   return new Web3(provider)
 }
 
-
-const Application = () => {
-  const isServerInfo = APP_ID && SERVER_URL ? true : false;
-  if (isServerInfo)
-    return (
-      <MoralisProvider appId={APP_ID} serverUrl={SERVER_URL}>
-        <MoralisDappProvider>
-          <Web3ReactProvider getLibrary={getLibrary}>
-            <App isServerInfo />
-          </Web3ReactProvider>
-        </MoralisDappProvider>
-      </MoralisProvider>
-    );
-  else {
-    return (
-      <div style={{ display: "flex", justifyContent: "center" }}>
-        <QuickStart />
-      </div>
-    );
-  }
-};
-
 ReactDOM.render(
   <React.StrictMode>
-      <Application />
+    <Web3ReactProvider getLibrary={getLibrary}>
+      <App />
+    </Web3ReactProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );
