@@ -1,71 +1,68 @@
 import React from 'react'
 import { Link } from "react-router-dom";
 import { Button } from "react-bootstrap";
-import {useContractKit} from "@celo-tools/use-contractkit";
 import Create  from "../create/Create";
+import { InjectedConnector } from '@web3-react/injected-connector'
+import { useWeb3React } from "@web3-react/core"
+
 import './Navigation.css'
 
 
  const Navigation = () => {
 
-    const { authenticate, isAuthenticated, isAuthenticating, user, account, logout } = useMoralis();
 
-    useEffect(() => {
-    if (isAuthenticated) {
-      // add your logic here
+  const injected = new InjectedConnector({
+    supportedChainIds: [1, 3, 4, 5, 42],
+  })
+
+  const { account, activate, deactivate } = useWeb3React()
+
+  async function connect() {
+    try {
+      await activate(injected)
+    } catch (ex) {
+      console.log(ex)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAuthenticated]);
+  }
 
-    const login = async () => {
-      if (!isAuthenticated) {
-
-        await authenticate({signingMessage: "Log in using Moralis" })
-          .then(function (user) {
-            console.log("logged in user:", user);
-            console.log(user!.get("ethAddress"));
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
-      }
+  async function disconnect() {
+    try {
+      deactivate()
+    } catch (ex) {
+      console.log(ex)
     }
+  }
+  
+   
+  return (
+      <>
 
-    const logOut = async () => {
-      await logout();
-      console.log("logged out");
-    } 
+      <nav className="navbar-main p-2 border-b-2">
+          <h1 className='py-4 px-4 font-bold text-3xl'>VMS Marketplace</h1>
+          <div className='div-links'>
+              <Link to="/explore" className="navbar-links rounded-pill py-3 m-1">
+                  Explore
+              </Link>
 
+              <Link to="/profile" className="navbar-links rounded-pill py-3 m-1">
+                  My NFTs
+              </Link>
 
-    return (
-        <>
+              <Create />
 
-        <nav className="navbar-main p-2 border-b-2">
-            <h1 className='py-4 px-4 font-bold text-3xl'>VMS Marketplace</h1>
-            <div className='div-links'>
-                <Link to="/explore" className="navbar-links rounded-pill py-3 m-1">
-                    Explore
-                </Link>
-
-                <Link to="/profile" className="navbar-links rounded-pill py-3 m-1">
-                    My NFTs
-                </Link>
-
-                <Create />
-
-                {!address ? (
-                    <>
-                        <Button type='button' onClick={connect} variant="outline-dark" className="navbar-btn rounded-pill px-5 m-1">Connect Wallet</Button>
-                    </>
-                ): (
-                    <>
-                        <Button type='button' onClick={destroy} variant="outline-dark" className="navbar-btn rounded-pill px-5 m-1">LOGOUT</Button>
-                    </>
-                )}
-            </div>
-        </nav>
-        </>
-    )
+              {!account ? (
+                  <>
+                      <Button type='button' onClick={connect} variant="outline-dark" className="navbar-btn rounded-pill px-5 m-1">Connect Wallet</Button>
+                  </>
+              ): (
+                  <>
+                      <Button type='button' onClick={disconnect} variant="outline-dark" className="navbar-btn rounded-pill px-5 m-1">LOGOUT</Button>
+                  </>
+              )}
+          </div>
+      </nav>
+      </>
+  )
 }
 
 export default Navigation

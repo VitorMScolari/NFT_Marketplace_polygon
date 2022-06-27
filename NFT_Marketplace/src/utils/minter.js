@@ -10,10 +10,9 @@ export const createNft = async (
     minterContract,
     marketContract,
     price,
-    performActions,
     { name, description, exteralUrl, ipfsImage, ownerAddress}
   ) => {
-    await performActions(async (kit) => {
+    await (async (kit) => {
       // require that NFT has a name, description and an image
       if (!name || !description || !ipfsImage) return;
       // address of the account that is currently connected to the dapp via the wallet.

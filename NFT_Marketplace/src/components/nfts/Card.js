@@ -7,13 +7,13 @@ import Identicon from "../ui/Identicon";
 import { toast } from "react-toastify";
 import { NotificationSuccess,  NotificationError} from "../ui/Notifications";
 import {useMarketContract} from "../../hooks/useMarketContract";
-import { useContractKit } from "@celo-tools/use-contractkit";
+import { useWeb3React } from "@web3-react/core"
 import { ethers } from "ethers";
 
 const NftCard = ({ nft }) => {
   
   // get user wallet address and performActions function from Celo Contract Kit
-  const { address, performActions } = useContractKit();
+  const { account } = useWeb3React()
   const navigate = useNavigate()
 
   // handles the state of the modal
@@ -36,12 +36,12 @@ const NftCard = ({ nft }) => {
   // function for updating NFT price
   const relistNft = async () => {
     try {
-        await performActions(async (kit) => {
+        await (async (kit) => {
           /* user will be prompted to pay the asking process to complete the transaction */
           console.log(price)
           // calls relist function from marketplace contract, passing NFT item id, id that keeps track of each market item 
           // (not tokenId, which tracks the id in the NFT contract)
-          const relistItem = await marketContract.methods.relistItem(nft.itemId, price).send({ from: address });
+          const relistItem = await marketContract.methods.relistItem(nft.itemId, price).send({ from: account });
           if (!relistItem) alert("Failed to Re-List NFT." );
           toast(<NotificationSuccess text="Updating NFT list...." />);
           // react component that redirects user to the explore page
@@ -60,7 +60,7 @@ const NftCard = ({ nft }) => {
         // itemId (id that keeps track of each market item)
         const id = parseInt(nft.itemId)
 
-        await performActions(async (kit) => {
+        await (async (kit) => {
           // user wallet address
           const { defaultAccount } = kit;
           // market fee charged for buying NFT, determined when deploying the marketplace contract

@@ -7,10 +7,17 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "react-toastify/dist/ReactToastify.min.css";
 import { MoralisDappProvider } from "./providers/MoralisDappProvider/MoralisDappProvider";
 import { MoralisProvider } from "react-moralis";
+import { Web3ReactProvider } from '@web3-react/core'
+import QuickStart from "./components/QuickStart.jsx";
+import Web3 from 'web3'
 
 
 const APP_ID = process.env.MORALIS_PUBLIC_APP_ID;
 const SERVER_URL = process.env.MORALIS_PUBLIC_SERVER_URL;
+
+function getLibrary(provider) {
+  return new Web3(provider)
+}
 
 
 const Application = () => {
@@ -19,7 +26,9 @@ const Application = () => {
     return (
       <MoralisProvider appId={APP_ID} serverUrl={SERVER_URL}>
         <MoralisDappProvider>
-          <App isServerInfo />
+          <Web3ReactProvider getLibrary={getLibrary}>
+            <App isServerInfo />
+          </Web3ReactProvider>
         </MoralisDappProvider>
       </MoralisProvider>
     );

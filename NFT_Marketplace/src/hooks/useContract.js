@@ -1,18 +1,17 @@
 import { useState, useEffect, useCallback } from "react";
-import { useContractKit } from "@celo-tools/use-contractkit";
+import { ethers } from 'ethers'
 
-export const useContract = (abi, contractAddress) => {
-  const { getConnectedKit, address } = useContractKit();
+export const useContract = (abi, contractAddress, userAddress) => {
+
   const [contract, setContract] = useState(null);
 
   const getContract = useCallback(async () => {
-    const kit = await getConnectedKit();
-    setContract(new kit.web3.eth.Contract(abi, contractAddress));
-  }, [getConnectedKit, abi, contractAddress]);
+    setContract(new ethers.Contract(abi, contractAddress, userAddress));
+  }, [userAddress, abi, contractAddress]);
 
   useEffect(() => {
-    if (address) getContract();
-  }, [address, getContract]);
+    if (userAddress) getContract();
+  }, [userAddress, getContract]);
 
   return contract;
 };

@@ -7,7 +7,7 @@ import { useMarketContract } from "../../hooks/useMarketContract";
 import { useMinterContract } from "../../hooks/useMinterContract";
 import axios from "axios";
 import {ethers} from "ethers";
-import { useContractKit } from "@celo-tools/use-contractkit";
+import { useWeb3React } from "@web3-react/core"
 import { RingLoader } from "react-spinners";
 import '../explore/Explore.css';
 
@@ -21,11 +21,11 @@ const Profile = () => {
     const [loading, setLoading] = useState(false);
 
     // gets the wallet address of user that is currently connected
-    const { address } = useContractKit();
+    const { account } = useWeb3React()
     // create marketplace contract abstraction
-    const marketContract = useMarketContract();
+    const marketContract = useMarketContract(account);
     // create NFT contract abstraction
-    const minterContract = useMinterContract();
+    const minterContract = useMinterContract(account);
 
     const getAssets = useCallback(async () => {
       try {
@@ -61,7 +61,7 @@ const Profile = () => {
           }))
           if (!items) return;
           // filters all items to return only items owned by user
-          const profileItems = await items.filter(nft => {return address.toLowerCase() === nft.seller.toLowerCase()})
+          const profileItems = await items.filter(nft => {return account.toLowerCase() === nft.seller.toLowerCase()})
           // maps through filtered items and sets relist property to true for all of them,
           // so it´s possible to display the relist button later on
           await profileItems.map(nft => nft['relist'] = true)
@@ -75,7 +75,7 @@ const Profile = () => {
           // set loading to false so it stops react animation
           setLoading(false);
         }
-      }, [minterContract, marketContract, address]);
+      }, [minterContract, marketContract, account]);
 
       useEffect(() => {
         try {

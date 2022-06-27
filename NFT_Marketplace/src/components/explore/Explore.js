@@ -7,7 +7,7 @@ import { useMarketContract } from "../../hooks/useMarketContract";
 import { useMinterContract } from "../../hooks/useMinterContract";
 import axios from "axios";
 import {ethers} from "ethers";
-import { useContractKit } from "@celo-tools/use-contractkit";
+import { useWeb3React } from "@web3-react/core"
 import { RingLoader } from "react-spinners";
 import './Explore.css';
 
@@ -19,11 +19,11 @@ const Explore = () => {
     const [loading, setLoading] = useState(false);
 
     // gets the wallet address of user that is currently connected
-    const { address } = useContractKit();
+    const { account } = useWeb3React()
     // create marketplace contract abstraction
-    const marketContract = useMarketContract();
+    const marketContract = useMarketContract(account);
     // create NFT contract abstraction
-    const minterContract = useMinterContract();
+    const minterContract = useMinterContract(account);
 
     const getAssets = useCallback(async () => {
         try {
@@ -63,7 +63,7 @@ const Explore = () => {
               nft['remove'] = true
               console.log(nft)
               // add remove property for allowing to display buttons conditionally later
-              return address.toLowerCase() === nft.seller.toLowerCase() ? nft['relist'] = true : nft['relist'] = false
+              return account.toLowerCase() === nft.seller.toLowerCase() ? nft['relist'] = true : nft['relist'] = false
             })
             // set NFTs list to items
             setNfts(items);               
@@ -74,7 +74,7 @@ const Explore = () => {
           // set loading to false so it stops react animation
           setLoading(false);
         }
-      }, [minterContract, marketContract, address]);
+      }, [minterContract, marketContract, account]);
 
       useEffect(() => {
         try {

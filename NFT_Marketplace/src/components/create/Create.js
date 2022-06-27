@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useContractKit } from "@celo-tools/use-contractkit";
+import { useWeb3React } from "@web3-react/core"
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { NotificationSuccess,  NotificationError} from "../ui/Notifications";
@@ -23,12 +23,12 @@ const AddNfts = () => {
   // allows to redirect user after a function is called
   const navigate = useNavigate();
 
-  // get wallet address
-  const { performActions, address } = useContractKit();
+  const { account } = useWeb3React()
+
 
   // contract abstractions
-  const minterContract = useMinterContract();
-  const marketContract = useMarketContract();
+  const minterContract = useMinterContract(account);
+  const marketContract = useMarketContract(account);
 
 
   // check if all form data has been filled
@@ -44,7 +44,7 @@ const AddNfts = () => {
   const addNft = async (data) => {
     try {
         // mint the NFT and list it on the marketplace
-        await createNft(minterContract, marketContract, price, performActions, data);
+        await createNft(minterContract, marketContract, price, data);
         toast(<NotificationSuccess text="Updating NFT list...." />);
         // redirect user to profile page
         navigate(`/profile`)
@@ -177,7 +177,7 @@ const AddNfts = () => {
                 description,
                 exteralUrl,
                 ipfsImage,
-                ownerAddress: address
+                ownerAddress: account
               });
               handleClose();
             }}
