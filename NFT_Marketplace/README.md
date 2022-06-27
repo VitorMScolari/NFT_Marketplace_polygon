@@ -1,9 +1,6 @@
 # Website currently hosted at:
 ## [VMS Marketplace](https://vitormscolari.github.io/VMS_Marketplace/)
 
-# Celo React Boilerplate
-This repository contains a simple React boilerplate for Celo projects.
-
 ## 1. Tech Stack
 This boilerplate uses the following tech stack:
 - [React](https://reactjs.org/) - A JavaScript library for building user interfaces.

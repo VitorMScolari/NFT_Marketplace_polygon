@@ -158,7 +158,7 @@ const AddNfts = () => {
                 }}
               />
               <select>
-                  <option value="CELO">CELO</option>
+                  <option value="MATIC">MATIC</option>
               </select>
             </FloatingLabel>
           </Form>
