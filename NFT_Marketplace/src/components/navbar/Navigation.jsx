@@ -4,6 +4,7 @@ import { Button } from "react-bootstrap";
 import Create  from "../create/Create";
 import { InjectedConnector } from '@web3-react/injected-connector'
 import { useWeb3React } from "@web3-react/core"
+import networks from '../../utils/networks'
 
 import './Navigation.css'
 
@@ -12,7 +13,7 @@ import './Navigation.css'
 
 
   const injected = new InjectedConnector({
-    supportedChainIds: [1, 3, 4, 5, 42],
+    supportedChainIds: networks,
   })
 
   const { account, activate, deactivate } = useWeb3React()
