@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useRef } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import PropTypes from "prop-types";
 import Nft from "../nfts/Card";
 import Loader from "../ui/Loader";
@@ -39,7 +39,7 @@ const Profile = () => {
               // gets the tokenId for each market item
               const tokenId = Number(marketItem.tokenId);
               // gets tokenURI for each market item
-              const tokenURI = await minterContract.methods.tokenURI(tokenId).call();
+              const tokenURI = await minterContract.tokenURI(tokenId).call();
               // get the address of NFT owner (used to filter out NFTs that are not owned by user)
               const seller = marketItem.seller;
               // get NFT metadata
@@ -80,8 +80,12 @@ const Profile = () => {
 
       useEffect(() => {
         try {
-          if (!web3reactContext.account) return alert('Please Connect your Wallet');
-          console.log(web3reactContext)
+          if (!web3reactContext.account) return (
+            <div className="nonfts-div">
+                {<RingLoader color={"green"} size={150} />}
+                <span className="nonfts-text">No NFTs yet <br /> Create one to display</span>
+            </div>
+        );
           // create marketplace contract abstraction
           marketContract.current = getContract(web3reactContext.library, web3reactContext.account, MarketContractAddress.address, marketAbi[0]['abi']);
           // create NFT contract abstraction
