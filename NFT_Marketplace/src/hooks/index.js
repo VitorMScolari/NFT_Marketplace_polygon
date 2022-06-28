@@ -1,3 +1,3 @@
-export * from "./useMinterContract";
-export * from "./useMarketContract";
+export * from "./minterContract";
+export * from "./marketContract";
 export * from "./useContract";

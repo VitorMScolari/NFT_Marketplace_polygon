@@ -6,6 +6,6 @@ import { useWeb3React } from "@web3-react/core"
 
 export const useMinterContract = () => {
   const web3reactContext = useWeb3React();
-  getContract(web3reactContext.library, web3reactContext.account, nftAbi[0], NFTContractAddress.address);
+  getContract(web3reactContext.library, web3reactContext.account, nftAbi[0]['abi'], NFTContractAddress.address);
 }
 

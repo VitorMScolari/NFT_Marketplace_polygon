@@ -1,16 +1,19 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import PropTypes from "prop-types";
 import Nft from "../nfts/Card";
 import Loader from "../ui/Loader";
 import { Row } from "react-bootstrap";
-import { useMarketContract } from "../../hooks/useMarketContract";
-import { useMinterContract } from "../../hooks/useMinterContract";
 import axios from "axios";
 import {ethers} from "ethers";
 import { useWeb3React } from "@web3-react/core"
 import { RingLoader } from "react-spinners";
 import '../explore/Explore.css';
 
+import { getContract } from '../../hooks/useContract';
+import { marketAbi } from "../../contracts/Marketplace";
+import MarketContractAddress from "../../contracts/Marketplace-address.json";
+import { nftAbi } from "../../contracts/NFT";
+import NFTContractAddress from "../../contracts/NFT-address.json";
 
 
 
@@ -19,20 +22,18 @@ const Profile = () => {
     const [nfts, setNfts] = useState([]);
     // check if NFTs are loaded or not
     const [loading, setLoading] = useState(false);
+    const marketContract = useRef();
+    const minterContract = useRef();
 
-    // gets the wallet address of user that is currently connected
-    const { account } = useWeb3React()
-    // create marketplace contract abstraction
-    const marketContract = '';
-    // create NFT contract abstraction
-    const minterContract = '';
+     //connector, library, chainId, account, activate, deactivate
+     const web3reactContext = useWeb3React();
 
     const getAssets = useCallback(async () => {
       try {
           // sets loading to true so it displays react animation while NFTs load
           setLoading(true);
           // calls fetchMarketItems from marketplace contract to get info from all the items
-          const data = await marketContract.methods.fetchMarketItems().call()
+          const data = await marketContract.fetchMarketItems().call()
           // map through all items
           const items = await Promise.all(data.map(async marketItem => {
               // gets the tokenId for each market item
@@ -61,7 +62,7 @@ const Profile = () => {
           }))
           if (!items) return;
           // filters all items to return only items owned by user
-          const profileItems = await items.filter(nft => {return account.toLowerCase() === nft.seller.toLowerCase()})
+          const profileItems = await items.filter(nft => {return web3reactContext.account.toLowerCase() === nft.seller.toLowerCase()})
           // maps through filtered items and sets relist property to true for all of them,
           // so it´s possible to display the relist button later on
           await profileItems.map(nft => nft['relist'] = true)
@@ -75,10 +76,16 @@ const Profile = () => {
           // set loading to false so it stops react animation
           setLoading(false);
         }
-      }, [minterContract, marketContract, account]);
+      }, [minterContract, marketContract, web3reactContext.account]);
 
       useEffect(() => {
         try {
+          if (!web3reactContext.account) return alert('Please Connect your Wallet');
+          console.log(web3reactContext)
+          // create marketplace contract abstraction
+          marketContract.current = getContract(web3reactContext.library, web3reactContext.account, MarketContractAddress.address, marketAbi[0]['abi']);
+          // create NFT contract abstraction
+          minterContract.current = getContract(web3reactContext.library, web3reactContext.account, NFTContractAddress.address, nftAbi[0]['abi']);
           if (minterContract) {
             // gets all market Items when the page loads
             getAssets();
@@ -86,7 +93,7 @@ const Profile = () => {
         } catch (error) {
           console.log({ error });
         }
-      }, [minterContract, getAssets]);
+      }, [getAssets, web3reactContext]);
 
     return (
         <div className="explore-section">

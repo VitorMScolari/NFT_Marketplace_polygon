@@ -138,7 +138,7 @@ export const createMarketItem = async (address, minterContract, marketContract, 
     // allows marketplace to trade the user NFTs
     await minterContract.setApprovalForAll(MarketplaceContractAddress.address, true).send({ from: address })
     // creates the NFT item in the marketplace contract
-    let owner = await marketContract.makeItem(NFTContractAddress.address, tokenId, price).send({ from: address });
+    let owner = await marketContract.listItem(NFTContractAddress.address, tokenId, price);
     return owner;
   } catch (e) {
     console.log({ e });
