@@ -1,4 +1,4 @@
-{
+export const marketAbi = [{
   "_format": "hh-sol-artifact-1",
   "contractName": "Marketplace",
   "sourceName": "contracts/Marketplace.sol",
@@ -282,3 +282,4 @@
   "linkReferences": {},
   "deployedLinkReferences": {}
 }
+]

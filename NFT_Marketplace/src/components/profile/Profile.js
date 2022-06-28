@@ -23,9 +23,9 @@ const Profile = () => {
     // gets the wallet address of user that is currently connected
     const { account } = useWeb3React()
     // create marketplace contract abstraction
-    const marketContract = useMarketContract(account);
+    const marketContract = '';
     // create NFT contract abstraction
-    const minterContract = useMinterContract(account);
+    const minterContract = '';
 
     const getAssets = useCallback(async () => {
       try {

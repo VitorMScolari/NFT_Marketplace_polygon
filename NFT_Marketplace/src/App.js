@@ -12,7 +12,7 @@ const App = function AppWrapper() {
       <BrowserRouter basename="/VMS_Marketplace_polygon">
           <Navigation />
           <Routes>
-            <Route path="/" exact element={<Explore />} />
+            <Route path="/" exact element={<Explore  />} />
             <Route path="/explore" element={<Explore />} />
             <Route path="/profile" element={<Profile />} />
           </Routes>

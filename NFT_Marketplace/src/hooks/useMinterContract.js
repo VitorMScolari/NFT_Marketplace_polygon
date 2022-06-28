@@ -1,7 +1,11 @@
-import { useContract } from "./useContract";
-import NFTAbi from "../contracts/NFT.json";
+import { getContract } from "./useContract";
+import { nftAbi } from "../contracts/NFT";
 import NFTContractAddress from "../contracts/NFT-address.json";
+import { useWeb3React } from "@web3-react/core"
 
-export const useMinterContract = (userAddress) =>
-  useContract(NFTAbi.abi, NFTContractAddress.address, userAddress);
+
+export const useMinterContract = () => {
+  const web3reactContext = useWeb3React();
+  getContract(web3reactContext.library, web3reactContext.account, nftAbi[0], NFTContractAddress.address);
+}
 

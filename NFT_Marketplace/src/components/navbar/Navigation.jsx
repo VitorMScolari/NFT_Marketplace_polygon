@@ -2,38 +2,33 @@ import React from 'react'
 import { Link } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import Create  from "../create/Create";
-import { InjectedConnector } from '@web3-react/injected-connector'
-import { useWeb3React } from "@web3-react/core"
-import networks from '../../utils/networks'
-
 import './Navigation.css'
+import { useWeb3React } from "@web3-react/core"
+import { injected } from '../../hooks/connectors';
 
 
  const Navigation = () => {
 
+  //connector, library, chainId, account, activate, deactivate
+	const web3reactContext = useWeb3React();
 
-  const injected = new InjectedConnector({
-    supportedChainIds: networks,
-  })
+  const disconnect = () => {
+		try {
+			web3reactContext.deactivate();
+		} catch (ex) {
+			console.log(ex);
+		}
+	};
 
-  const { account, activate, deactivate } = useWeb3React()
+  //web3react metamask
+	const connect = async () => {
+		try {
+			await web3reactContext.activate(injected);
+		} catch (ex) {
+			console.log(ex);
+		}
+	};
 
-  async function connect() {
-    try {
-      await activate(injected)
-    } catch (ex) {
-      console.log(ex)
-    }
-  }
-
-  async function disconnect() {
-    try {
-      deactivate()
-    } catch (ex) {
-      console.log(ex)
-    }
-  }
-  
    
   return (
       <>
@@ -51,7 +46,7 @@ import './Navigation.css'
 
               <Create />
 
-              {!account ? (
+              {!web3reactContext.account ? (
                   <>
                       <Button type='button' onClick={connect} variant="outline-dark" className="navbar-btn rounded-pill px-5 m-1">Connect Wallet</Button>
                   </>
