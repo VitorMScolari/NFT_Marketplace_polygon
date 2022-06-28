@@ -3,8 +3,8 @@ import PropTypes from "prop-types";
 import Nft from "../nfts/Card";
 import Loader from "../ui/Loader";
 import { Row } from "react-bootstrap";
-import { useMarketContract } from "../../hooks/useMarketContract";
-import { useMinterContract } from "../../hooks/useMinterContract";
+import { useMarketContract } from "../../hooks/marketContract";
+import { useMinterContract } from "../../hooks/minterContract";
 import axios from "axios";
 import {ethers} from "ethers";
 import { useWeb3React } from "@web3-react/core"

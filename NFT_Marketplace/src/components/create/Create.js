@@ -5,16 +5,14 @@ import { toast } from "react-toastify";
 import { NotificationSuccess,  NotificationError} from "../ui/Notifications";
 import { Button, Modal, Form, FloatingLabel } from "react-bootstrap";
 import { uploadToIpfs } from "../../utils/minter";
-import { getContract } from '../../hooks/useContract';
 import { createNft } from "../../utils/minter";
 import { ethers } from "ethers";
 
+import { getContract } from '../../hooks/useContract';
 import { marketAbi } from "../../contracts/Marketplace";
 import MarketContractAddress from "../../contracts/Marketplace-address.json";
 import { nftAbi } from "../../contracts/NFT";
 import NFTContractAddress from "../../contracts/NFT-address.json";
-
-// import { useMarketContract } from '../../hooks/useMarketContract'
 
 
 const AddNfts = () => {

@@ -6,5 +6,5 @@ import { useWeb3React } from "@web3-react/core"
 
 export const useMarketContract = () => {
   const web3reactContext = useWeb3React();
-  getContract(web3reactContext.library, web3reactContext.account, marketAbi[0], MarketContractAddress.address);
+  getContract(web3reactContext.library, web3reactContext.account, marketAbi[0]['abi'], MarketContractAddress.address);
 }

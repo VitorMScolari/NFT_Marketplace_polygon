@@ -6,7 +6,7 @@ import { truncateAddress } from "../../utils";
 import Identicon from "../ui/Identicon";
 import { toast } from "react-toastify";
 import { NotificationSuccess,  NotificationError} from "../ui/Notifications";
-import {useMarketContract} from "../../hooks/useMarketContract";
+import { useMarketContract } from "../../hooks/marketContract";
 import { useWeb3React } from "@web3-react/core"
 import { ethers } from "ethers";
 
