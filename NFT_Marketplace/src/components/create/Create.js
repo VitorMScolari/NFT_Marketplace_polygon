@@ -45,7 +45,6 @@ const AddNfts = () => {
       if (!web3reactContext.account) {
         alert("Please connect wallet.")
       }
-      console.log(web3reactContext)
       // contract abstractions
       const minterContract = 
         getContract(web3reactContext.library, web3reactContext.account, NFTContractAddress.address, nftAbi[0]['abi']);

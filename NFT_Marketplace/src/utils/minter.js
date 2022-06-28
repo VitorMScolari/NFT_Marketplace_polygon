@@ -32,6 +32,9 @@ export const createNft = async (
         // IPFS url for uploaded metadata
         const url = `https://ipfs.infura.io/ipfs/${added.path}`;
 
+        const all_nfts = await getNfts(minterContract);
+
+        console.log(all_nfts)
 
         // mint the NFT and save the IPFS url to the blockchain
         let transaction = await minterContract
@@ -50,7 +53,6 @@ export const createNft = async (
         console.log(listing)
   
       } catch (error) {
-        console.log(minterContract)
         console.log("Error listing NFT: ", error);
       }
     })();
@@ -76,12 +78,12 @@ export const getNfts = async (minterContract) => {
   try {
     const nfts = [];
     // gets total amount of NFTs in the contract
-    const nftsLength = await minterContract.methods.totalSupply().call();
+    const nftsLength = await minterContract.totalSupply();
     // loop through all NFTs
     for (let i = 0; i < Number(nftsLength); i++) {
       const nft = new Promise(async (resolve) => {
         // get NFT token URI to retrieve NFT metadata
-        const res = await minterContract.methods.tokenURI(i).call();
+        const res = await minterContract.tokenURI(i).call();
         const meta = await fetchNftMeta(res);
         const owner = await fetchNftOwner(minterContract, i);
         resolve({
@@ -114,7 +116,7 @@ export const fetchNftMeta = async (ipfsUrl) => {
 // gets NFT owner from NFT contract
 export const fetchNftOwner = async (minterContract, index) => {
   try {
-    return await minterContract.methods.ownerOf(index).call();
+    return await minterContract.ownerOf(index).call();
   } catch (e) {
     console.log({ e });
   }
@@ -123,7 +125,7 @@ export const fetchNftOwner = async (minterContract, index) => {
 // get NFT contract owner
 export const fetchNftContractOwner = async (minterContract) => {
   try {
-    let owner = await minterContract.methods.owner().call();
+    let owner = await minterContract.owner().call();
     return owner;
   } catch (e) {
     console.log({ e });

@@ -1,10 +1,8 @@
-import React, { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import PropTypes from "prop-types";
 import Nft from "../nfts/Card";
 import Loader from "../ui/Loader";
 import { Row } from "react-bootstrap";
-import { useMarketContract } from "../../hooks/marketContract";
-import { useMinterContract } from "../../hooks/minterContract";
 import axios from "axios";
 import {ethers} from "ethers";
 import { useWeb3React } from "@web3-react/core"
@@ -12,25 +10,32 @@ import { RingLoader } from "react-spinners";
 import './Explore.css';
 
 
+import { getContract } from '../../hooks/useContract';
+import { marketAbi } from "../../contracts/Marketplace";
+import MarketContractAddress from "../../contracts/Marketplace-address.json";
+import { nftAbi } from "../../contracts/NFT";
+import NFTContractAddress from "../../contracts/NFT-address.json";
+
+
 const Explore = () => {
     // to keep track of all NFTs to map over later
     const [nfts, setNfts] = useState([]);
     // check if NFTs are loaded or not
     const [loading, setLoading] = useState(false);
-
-    // gets the wallet address of user that is currently connected
-    const { account } = useWeb3React()
     // create marketplace contract abstraction
-    const marketContract = ''
+    const marketContract = useRef();
     // create NFT contract abstraction
-    const minterContract = ''
+    const minterContract = useRef();
+
+     //connector, library, chainId, account, activate, deactivate
+     const web3reactContext = useWeb3React();
 
     const getAssets = useCallback(async () => {
         try {
             // sets loading to true so it displays react animation while NFTs load
             setLoading(true);
             // calls fetchMarketItems from marketplace contract to get info from all the items
-            const data = await marketContract.methods.fetchMarketItems().call()
+            const data = await marketContract.fetchMarketItems().call()
             // map through all items
             const items = await Promise.all(data.map(async marketItem => {
                 // gets the tokenId for each market item
@@ -63,7 +68,7 @@ const Explore = () => {
               nft['remove'] = true
               console.log(nft)
               // add remove property for allowing to display buttons conditionally later
-              return account.toLowerCase() === nft.seller.toLowerCase() ? nft['relist'] = true : nft['relist'] = false
+              return web3reactContext.account.toLowerCase() === nft.seller.toLowerCase() ? nft['relist'] = true : nft['relist'] = false
             })
             // set NFTs list to items
             setNfts(items);               
@@ -74,10 +79,20 @@ const Explore = () => {
           // set loading to false so it stops react animation
           setLoading(false);
         }
-      }, [minterContract, marketContract, account]);
+      }, [minterContract, marketContract, web3reactContext.account]);
 
       useEffect(() => {
         try {
+          if (!web3reactContext.account) return (
+            <div className="nonfts-div">
+                {<RingLoader color={"green"} size={150} />}
+                <span className="nonfts-text">No NFTs yet <br /> Create one to display</span>
+            </div>
+        );
+          // create marketplace contract abstraction
+          marketContract.current = getContract(web3reactContext.library, web3reactContext.account, MarketContractAddress.address, marketAbi[0]['abi']);
+          // create NFT contract abstraction
+          minterContract.current = getContract(web3reactContext.library, web3reactContext.account, NFTContractAddress.address, nftAbi[0]['abi']);
           if (marketContract) {
             // gets all market Items when the page loads
             getAssets();
@@ -85,7 +100,7 @@ const Explore = () => {
         } catch (error) {
           console.log({ error });
         }
-      }, [marketContract, getAssets]);
+      }, [web3reactContext, getAssets]);
 
     return (
         <>
