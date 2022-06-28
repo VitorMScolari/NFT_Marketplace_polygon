@@ -2,21 +2,33 @@ import React from 'react'
 import { Link } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import Create  from "../create/Create";
-
 import './Navigation.css'
+import { useWeb3React } from "@web3-react/core"
+import { injected } from '../../hooks/connectors';
 
 
- const Navigation = ({ accounts, setAccounts }) => {
-  const isConnected = Boolean(accounts[0])
+ const Navigation = () => {
 
-  async function connectAccount() {
-    if (window.ethereum) {
-      const accounts = await window.ethereum.request({
-        method: "eth_requestAccounts",
-      });
-      setAccounts(accounts);
-    }
-  }
+  //connector, library, chainId, account, activate, deactivate
+	const web3reactContext = useWeb3React();
+
+  const disconnect = () => {
+		try {
+			web3reactContext.deactivate();
+		} catch (ex) {
+			console.log(ex);
+		}
+	};
+
+  //web3react metamask
+	const connect = async () => {
+		try {
+			await web3reactContext.activate(injected);
+		} catch (ex) {
+			console.log(ex);
+		}
+	};
+
    
   return (
       <>
@@ -32,15 +44,15 @@ import './Navigation.css'
                   My NFTs
               </Link>
 
-              <Create accounts={accounts} />
+              <Create />
 
-              {!isConnected ? (
+              {!web3reactContext.account ? (
                   <>
-                      <Button type='button' onClick={connectAccount} variant="outline-dark" className="navbar-btn rounded-pill px-5 m-1">Connect Wallet</Button>
+                      <Button type='button' onClick={connect} variant="outline-dark" className="navbar-btn rounded-pill px-5 m-1">Connect Wallet</Button>
                   </>
               ): (
                   <>
-                      <Button type='button' variant="outline-dark" className="navbar-btn rounded-pill px-5 m-1">LOGOUT</Button>
+                      <Button type='button' onClick={disconnect} variant="outline-dark" className="navbar-btn rounded-pill px-5 m-1">LOGOUT</Button>
                   </>
               )}
           </div>

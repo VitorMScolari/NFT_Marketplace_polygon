@@ -1,18 +1,8 @@
-import { useState, useEffect, useCallback } from "react";
-import { ethers } from 'ethers'
+import { Contract } from '@ethersproject/contracts';
 
-export const useContract = (abi, contractAddress, userAddress) => {
 
-  const [contract, setContract] = useState(null);
-
-  const getContract = useCallback(async () => {
-    const ct = new ethers.Contract(abi, contractAddress, userAddress);
-    setContract(ct);
-  }, [userAddress, abi, contractAddress]);
-
-  useEffect(() => {
-    if (userAddress) getContract();
-  }, [userAddress, getContract]);
-
-  return contract;
+export const getContract = (library, account, contractAddress, contractAbi) => {
+	const signer = library.getSigner(account).connectUnchecked();
+	var contract = new Contract(contractAddress, contractAbi, signer);
+	return contract;
 };

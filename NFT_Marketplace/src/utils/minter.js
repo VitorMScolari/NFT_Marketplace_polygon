@@ -34,9 +34,8 @@ export const createNft = async (
 
 
         // mint the NFT and save the IPFS url to the blockchain
-        let transaction = await minterContract.methods
-          .safeMint(ownerAddress, url)
-          .send({ from: ownerAddress });
+        let transaction = await minterContract
+          .safeMint(ownerAddress, url);
 
         console.log(transaction)
 
@@ -51,6 +50,7 @@ export const createNft = async (
         console.log(listing)
   
       } catch (error) {
+        console.log(minterContract)
         console.log("Error listing NFT: ", error);
       }
     })();
@@ -136,9 +136,9 @@ export const createMarketItem = async (address, minterContract, marketContract, 
 
     console.log(price)
     // allows marketplace to trade the user NFTs
-    await minterContract.methods.setApprovalForAll(MarketplaceContractAddress.address, true).send({ from: address })
+    await minterContract.setApprovalForAll(MarketplaceContractAddress.address, true).send({ from: address })
     // creates the NFT item in the marketplace contract
-    let owner = await marketContract.methods.makeItem(NFTContractAddress.address, tokenId, price).send({ from: address });
+    let owner = await marketContract.makeItem(NFTContractAddress.address, tokenId, price).send({ from: address });
     return owner;
   } catch (e) {
     console.log({ e });

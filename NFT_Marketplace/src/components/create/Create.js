@@ -1,14 +1,20 @@
 import React, { useState } from "react";
-import { useWeb3React } from "@web3-react/core"
+import { useWeb3React } from '@web3-react/core';
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { NotificationSuccess,  NotificationError} from "../ui/Notifications";
 import { Button, Modal, Form, FloatingLabel } from "react-bootstrap";
 import { uploadToIpfs } from "../../utils/minter";
-import { useMinterContract } from "../../hooks";
-import {useMarketContract} from "../../hooks/useMarketContract";
+import { getContract } from '../../hooks/useContract';
 import { createNft } from "../../utils/minter";
 import { ethers } from "ethers";
+
+import { marketAbi } from "../../contracts/Marketplace";
+import MarketContractAddress from "../../contracts/Marketplace-address.json";
+import { nftAbi } from "../../contracts/NFT";
+import NFTContractAddress from "../../contracts/NFT-address.json";
+
+// import { useMarketContract } from '../../hooks/useMarketContract'
 
 
 const AddNfts = () => {
@@ -23,31 +29,35 @@ const AddNfts = () => {
   // allows to redirect user after a function is called
   const navigate = useNavigate();
 
-  const { account } = useWeb3React()
-
-
-  // contract abstractions
-  const minterContract = useMinterContract(account);
-  const marketContract = useMarketContract(account);
-
+  //connector, library, chainId, account, activate, deactivate
+	const web3reactContext = useWeb3React();
 
   // check if all form data has been filled
   const isFormFilled = () =>
   name && ipfsImage && description && price;
-
+  
   // close the popup modal
   const handleClose = () => {
     setShow(false);
   };
-
+  
   // calls function minter from utils folder to mint the NFT and list it on the market
   const addNft = async (data) => {
     try {
-        // mint the NFT and list it on the marketplace
-        await createNft(minterContract, marketContract, price, data);
-        toast(<NotificationSuccess text="Updating NFT list...." />);
-        // redirect user to profile page
-        navigate(`/profile`)
+      if (!web3reactContext.account) {
+        alert("Please connect wallet.")
+      }
+      console.log(web3reactContext)
+      // contract abstractions
+      const minterContract = 
+        getContract(web3reactContext.library, web3reactContext.account, NFTContractAddress.address, nftAbi[0]['abi']);
+      const marketContract = 
+        getContract(web3reactContext.library, web3reactContext.account, MarketContractAddress.address, marketAbi[0]['abi']);
+      // mint the NFT and list it on the marketplace
+      await createNft(minterContract, marketContract, price, data);
+      toast(<NotificationSuccess text="Updating NFT list...." />);
+      // redirect user to profile page
+      navigate(`/profile`)
       } catch (error) {
         console.log({ error });
         toast(<NotificationError text="Failed to create an NFT." />);
@@ -177,7 +187,7 @@ const AddNfts = () => {
                 description,
                 exteralUrl,
                 ipfsImage,
-                ownerAddress: account
+                ownerAddress: web3reactContext.account
               });
               handleClose();
             }}

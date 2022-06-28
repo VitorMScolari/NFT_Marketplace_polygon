@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {BrowserRouter, Routes, Route } from "react-router-dom";
 import Navigation from './components/navbar/Navigation';
 import Explore from './components/explore/Explore';
@@ -7,16 +7,14 @@ import "./App.css";
 
 const App = function AppWrapper() {
 
-  const [accounts, setAccounts] = useState([]);
-
   return (
     <>
       <BrowserRouter basename="/VMS_Marketplace_polygon">
-          <Navigation accounts={accounts} setAccounts = {setAccounts}  />
+          <Navigation />
           <Routes>
-            <Route path="/" exact element={<Explore accounts={accounts} setAccounts = {setAccounts} />} />
-            <Route path="/explore" element={<Explore accounts={accounts} setAccounts = {setAccounts} />} />
-            <Route path="/profile" element={<Profile accounts={accounts} setAccounts = {setAccounts} />} />
+            <Route path="/" exact element={<Explore  />} />
+            <Route path="/explore" element={<Explore />} />
+            <Route path="/profile" element={<Profile />} />
           </Routes>
       </BrowserRouter>
     </>

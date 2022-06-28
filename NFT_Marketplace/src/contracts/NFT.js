@@ -1,4 +1,4 @@
-{
+export const nftAbi = [{
   "_format": "hh-sol-artifact-1",
   "contractName": "NFT",
   "sourceName": "contracts/MyNFT.sol",
@@ -541,3 +541,4 @@
   "linkReferences": {},
   "deployedLinkReferences": {}
 }
+]

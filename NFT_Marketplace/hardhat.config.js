@@ -84,14 +84,10 @@ const mainnetGwei = 115;
     },
     polygon: {
       url: `https://polygon-mainnet.infura.io/v3/${process.env.INFURA_ID}`,
-      gasPrice: 1000000000,
-      accounts: {
-        mnemonic: process.env.MNEMONIC,
-      },
+      accounts: [process.env.PRIVATE_KEY],
     },
     mumbai: {
-      url: "https://rpc-mumbai.maticvigil.com/",
-      gasPrice: 1000000000,
+      url: process.env.ALCHEMY_URL,
       accounts: [process.env.PRIVATE_KEY],
     },
   },
