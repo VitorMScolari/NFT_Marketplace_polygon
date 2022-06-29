@@ -11,10 +11,7 @@ import './Explore.css';
 
 
 import { getContract } from '../../hooks/useContract';
-import { marketAbi } from "../../contracts/Marketplace";
-import MarketContractAddress from "../../contracts/Marketplace-address.json";
-import { nftAbi } from "../../contracts/NFT";
-import NFTContractAddress from "../../contracts/NFT-address.json";
+import { nftAbi, nftAddress, marketAbi, marketAddress } from "../../contracts";
 
 
 const Explore = () => {
@@ -35,7 +32,7 @@ const Explore = () => {
             // sets loading to true so it displays react animation while NFTs load
             setLoading(true);
             // calls fetchMarketItems from marketplace contract to get info from all the items
-            const data = await marketContract.fetchMarketItems().call()
+            const data = await marketContract.getListing();
             // map through all items
             const items = await Promise.all(data.map(async marketItem => {
                 // gets the tokenId for each market item
@@ -90,9 +87,9 @@ const Explore = () => {
             </div>
         );
           // create marketplace contract abstraction
-          marketContract.current = getContract(web3reactContext.library, web3reactContext.account, MarketContractAddress.address, marketAbi[0]['abi']);
+          marketContract.current = getContract(web3reactContext.library, web3reactContext.account, marketAddress, marketAbi['abi']);
           // create NFT contract abstraction
-          minterContract.current = getContract(web3reactContext.library, web3reactContext.account, NFTContractAddress.address, nftAbi[0]['abi']);
+          minterContract.current = getContract(web3reactContext.library, web3reactContext.account, nftAddress, nftAbi['abi']);
           if (marketContract) {
             // gets all market Items when the page loads
             getAssets();

@@ -22,34 +22,53 @@ async function main() {
   console.log("NFT deployed to:", myNFT.address);
   // calls function to create and store files with NFT and marketplace addresses
   storeContractData(myNFT, "NFT");
-  storeContractData(marketplace, "Marketplace");
+  storeContractData(marketplace, "NftMarketplace", market=true);
 }
 
-function storeContractData(contract, name) {
+function storeContractData(contract, name, market=null) {
   // require file system library
   const fs = require("fs");
+
+  const network = 'rinkeby';
+
   // name of file where contract will be stored
-  const contractsDir = __dirname + "/../src/contracts";
+  const contractsDir = __dirname + `/../src/contracts/${network}`;
 
   // create folder if it doesn't exist
   if (!fs.existsSync(contractsDir)) {
     fs.mkdirSync(contractsDir);
   }
 
-  // write address of contract to file in the directory and parse to JSON
-  fs.writeFileSync(
-    contractsDir + `/${name}-address.json`,
-    JSON.stringify({ address: contract.address }, undefined, 2)
-  );
-
-  const MyNFTArtifact = artifacts.readArtifactSync(name);
-
-  // write ABI of contract to the file directory and parse to JSON
-  fs.writeFileSync(
-    contractsDir + `/${name}.json`,
-    JSON.stringify(MyNFTArtifact, null, 2)
-  );
-}
+  if (market) {
+      // write address of contract to file in the directory and parse to JSON
+      fs.writeFileSync(
+        contractsDir + `/${name}-address.json`,
+        JSON.stringify({ marketAddress: contract.address }, undefined, 2)
+      );
+    
+      const MyNFTArtifact = artifacts.readArtifactSync(name);
+    
+      // write ABI of contract to the file directory and parse to JSON
+      fs.writeFileSync(
+        contractsDir + `/${name}.js`,
+        `export const marketAbi = ${JSON.stringify(MyNFTArtifact, null, 2)}`
+      );
+    } else {
+       // write address of contract to file in the directory and parse to JSON
+       fs.writeFileSync(
+        contractsDir + `/${name}-address.json`,
+        JSON.stringify({ nftAddress: contract.address }, undefined, 2)
+      );
+    
+      const MyNFTArtifact = artifacts.readArtifactSync(name);
+    
+      // write ABI of contract to the file directory and parse to JSON
+      fs.writeFileSync(
+        contractsDir + `/${name}.js`,
+        `export const nftAbi = ${JSON.stringify(MyNFTArtifact, null, 2)}`
+      );
+    }
+  }
 
 main()
   .then(() => process.exit(0))

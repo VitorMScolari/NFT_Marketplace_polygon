@@ -9,10 +9,7 @@ import { createNft } from "../../utils/minter";
 import { ethers } from "ethers";
 
 import { getContract } from '../../hooks/useContract';
-import { marketAbi } from "../../contracts/Marketplace";
-import MarketContractAddress from "../../contracts/Marketplace-address.json";
-import { nftAbi } from "../../contracts/NFT";
-import NFTContractAddress from "../../contracts/NFT-address.json";
+import { nftAbi, nftAddress, marketAbi, marketAddress } from "../../contracts";
 
 
 const AddNfts = () => {
@@ -47,9 +44,9 @@ const AddNfts = () => {
       }
       // contract abstractions
       const minterContract = 
-        getContract(web3reactContext.library, web3reactContext.account, NFTContractAddress.address, nftAbi[0]['abi']);
+        getContract(web3reactContext.library, web3reactContext.account, nftAddress, nftAbi['abi']);
       const marketContract = 
-        getContract(web3reactContext.library, web3reactContext.account, MarketContractAddress.address, marketAbi[0]['abi']);
+        getContract(web3reactContext.library, web3reactContext.account, marketAddress, marketAbi['abi']);
       // mint the NFT and list it on the marketplace
       await createNft(minterContract, marketContract, price, data);
       toast(<NotificationSuccess text="Updating NFT list...." />);

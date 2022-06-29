@@ -1,7 +1,6 @@
 import { create as ipfsHttpClient } from "ipfs-http-client";
 import axios from "axios";
-import NFTContractAddress from "../contracts/NFT-address.json";
-import MarketplaceContractAddress from "../contracts/Marketplace-address.json";
+import { nftAddress, marketAddress } from "../contracts";
 
 const client = ipfsHttpClient("https://ipfs.infura.io:5001/api/v0");
 
@@ -138,9 +137,9 @@ export const createMarketItem = async (address, minterContract, marketContract, 
 
     console.log(price)
     // allows marketplace to trade the user NFTs
-    await minterContract.setApprovalForAll(MarketplaceContractAddress.address, true).send({ from: address })
+    await minterContract.setApprovalForAll(marketAddress, true).send({ from: address })
     // creates the NFT item in the marketplace contract
-    let owner = await marketContract.listItem(NFTContractAddress.address, tokenId, price);
+    let owner = await marketContract.listItem(nftAddress, tokenId, price);
     return owner;
   } catch (e) {
     console.log({ e });

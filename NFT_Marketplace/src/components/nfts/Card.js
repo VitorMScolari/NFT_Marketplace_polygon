@@ -6,14 +6,17 @@ import { truncateAddress } from "../../utils";
 import Identicon from "../ui/Identicon";
 import { toast } from "react-toastify";
 import { NotificationSuccess,  NotificationError} from "../ui/Notifications";
-import { useMarketContract } from "../../hooks/marketContract";
 import { useWeb3React } from "@web3-react/core"
 import { ethers } from "ethers";
 
+import { getContract } from '../../hooks/useContract';
+import { marketAbi, marketAddress } from "../../contracts";
+
 const NftCard = ({ nft }) => {
   
-  // get user wallet address and performActions function from Celo Contract Kit
-  const { account } = useWeb3React()
+  //connector, library, chainId, account, activate, deactivate
+  const web3reactContext = useWeb3React();
+
   const navigate = useNavigate()
 
   // handles the state of the modal
@@ -21,8 +24,8 @@ const NftCard = ({ nft }) => {
 
   // sets price for relisting acording to user input from change price Button
   const [price, setPrice] = useState(0);
-  // creates market contract abstraction
-  const marketContract = useMarketContract();
+  // create marketplace contract abstraction
+  const marketContract = getContract(web3reactContext.library, web3reactContext.account, marketAddress, marketAbi['abi']);
 
   // check if all form data has been filled
   const isFormFilled = () =>
@@ -36,12 +39,12 @@ const NftCard = ({ nft }) => {
   // function for updating NFT price
   const relistNft = async () => {
     try {
-        await (async (kit) => {
+        await (async () => {
           /* user will be prompted to pay the asking process to complete the transaction */
           console.log(price)
           // calls relist function from marketplace contract, passing NFT item id, id that keeps track of each market item 
           // (not tokenId, which tracks the id in the NFT contract)
-          const relistItem = await marketContract.methods.relistItem(nft.itemId, price).send({ from: account });
+          const relistItem = await marketContract.methods.relistItem(nft.itemId, price).send({ from: web3reactContext.account });
           if (!relistItem) alert("Failed to Re-List NFT." );
           toast(<NotificationSuccess text="Updating NFT list...." />);
           // react component that redirects user to the explore page
