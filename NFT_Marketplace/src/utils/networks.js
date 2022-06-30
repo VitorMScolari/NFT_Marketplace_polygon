@@ -11,8 +11,4 @@ const networks = {
     "0xa86a": "AVAX Mainnet",
   }
   
-<<<<<<< HEAD
 export default networks;
-=======
-  export default networks;
->>>>>>> dev-modal

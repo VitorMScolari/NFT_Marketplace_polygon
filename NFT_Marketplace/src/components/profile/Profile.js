@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useEffect, useState, useCallback } from "react";
 import PropTypes from "prop-types";
 import Nft from "../nfts/Card";
 import Loader from "../ui/Loader";
@@ -19,24 +19,36 @@ const Profile = () => {
     const [nfts, setNfts] = useState([]);
     // check if NFTs are loaded or not
     const [loading, setLoading] = useState(false);
-    const marketContract = useRef();
-    const minterContract = useRef();
+    let marketContract;
+    let minterContract;
 
      //connector, library, chainId, account, activate, deactivate
      const web3reactContext = useWeb3React();
 
     const getAssets = useCallback(async () => {
       try {
+          if (!web3reactContext.account) return (
+            <div className="nonfts-div">
+                {<RingLoader color={"green"} size={150} />}
+                <span className="nonfts-text">No NFTs yet <br /> Create one to display</span>
+            </div>
+          );
+          // create marketplace contract abstraction
+          const marketContract = getContract(web3reactContext.library, web3reactContext.account, marketAddress, marketAbi['abi']);
+          // create NFT contract abstraction
+          const minterContract = getContract(web3reactContext.library, web3reactContext.account, nftAddress, nftAbi['abi']);
           // sets loading to true so it displays react animation while NFTs load
           setLoading(true);
           // calls fetchMarketItems from marketplace contract to get info from all the items
-          const data = await marketContract.getListing();
+          const data = await marketContract.getListing(nftAddress, 0);
+          if (!data) return;
           // map through all items
           const items = await Promise.all(data.map(async marketItem => {
+              console.log(marketItem)
               // gets the tokenId for each market item
               const tokenId = Number(marketItem.tokenId);
               // gets tokenURI for each market item
-              const tokenURI = await minterContract.tokenURI(tokenId).call();
+              const tokenURI = await minterContract.tokenURI(tokenId);
               // get the address of NFT owner (used to filter out NFTs that are not owned by user)
               const seller = marketItem.seller;
               // get NFT metadata
@@ -73,28 +85,16 @@ const Profile = () => {
           // set loading to false so it stops react animation
           setLoading(false);
         }
-      }, [minterContract, marketContract, web3reactContext.account]);
+      }, [web3reactContext.account, web3reactContext.library]);
 
       useEffect(() => {
         try {
-          if (!web3reactContext.account) return (
-            <div className="nonfts-div">
-                {<RingLoader color={"green"} size={150} />}
-                <span className="nonfts-text">No NFTs yet <br /> Create one to display</span>
-            </div>
-        );
-          // create marketplace contract abstraction
-          marketContract.current = getContract(web3reactContext.library, web3reactContext.account, marketAddress, marketAbi['abi']);
-          // create NFT contract abstraction
-          minterContract.current = getContract(web3reactContext.library, web3reactContext.account, nftAddress, nftAbi['abi']);
-          if (minterContract) {
-            // gets all market Items when the page loads
-            getAssets();
-          }
+          // gets all market Items when the page loads
+          getAssets();
         } catch (error) {
           console.log({ error });
         }
-      }, [getAssets, web3reactContext]);
+      }, [getAssets, minterContract, marketContract]);
 
     return (
         <div className="explore-section">

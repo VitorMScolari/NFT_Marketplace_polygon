@@ -1,10 +1,17 @@
 import { InjectedConnector } from '@web3-react/injected-connector';
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector';
 import { WalletLinkConnector } from '@web3-react/walletlink-connector';
+require('dotenv').config({path: '.env'});
+
 
 const RPC_URLS = {
-	1: 'https://mainnet.infura.io/v3/55d040fb60064deaa7acc8e320d99bd4',
-	4: 'https://rinkeby.infura.io/v3/55d040fb60064deaa7acc8e320d99bd4'
+	1: `https://mainnet.infura.io/v3/${process.env.INFURA_ID}`,
+	3: `https://ropsten.infura.io/v3/${process.env.INFURA_ID}`,
+	4: `https://rinkeby.infura.io/v3/${process.env.INFURA_ID}`,
+	5: `https://goerli.infura.io/v3/${process.env.INFURA_ID}`,
+	42: `https://kovan.infura.io/v3/${process.env.INFURA_ID}`,
+	137: `https://polygon-mainnet.infura.io/v3/${process.env.INFURA_ID}`,
+	80001: process.env.ALCHEMY_URL
 };
 
 //metamask
