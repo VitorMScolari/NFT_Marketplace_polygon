@@ -40,7 +40,10 @@ const AddNfts = () => {
   const addNft = async (data) => {
     try {
       if (!web3reactContext.account) {
-        alert("Please connect wallet.")
+        alert("Please connect wallet.");
+      }
+      if (!price) {
+        alert("Your NFT must have a price.");
       }
       // contract abstractions
       const minterContract = 

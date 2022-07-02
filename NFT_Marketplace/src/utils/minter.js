@@ -31,22 +31,29 @@ export const createNft = async (
         // IPFS url for uploaded metadata
         const url = `https://ipfs.infura.io/ipfs/${added.path}`;
 
-        const all_nfts = await getNfts(minterContract);
+        const owner2 = await fetchNftOwner(marketContract);
+
+        console.log(owner2)
+        console.log(ownerAddress)
+
+        await marketContract.listItem(nftAddress, 1, 1);
 
         // mint the NFT and save the IPFS url to the blockchain
-        let transaction = await minterContract
-          .safeMint(ownerAddress, url);
-
+        await minterContract.safeMint(ownerAddress, url);
+        
+        const all_nfts = await getNfts(minterContract);
 
         // filter NFTs for user and find the last one minted in order to list on market
-        let tokenId = parseInt(all_nfts.filter(e => e.owner.toLowerCase() === ownerAddress.toLowerCase()).sort()[-1])
+        let lastNftMinted = all_nfts.filter(e => e.owner.toLowerCase() === ownerAddress.toLowerCase());
 
-        console.log(transaction)
+        lastNftMinted = lastNftMinted[lastNftMinted.length - 1];
+
+        let tokenId = lastNftMinted.index;
+
+        console.log(tokenId)
 
         // calls function that lists the minted NFT in the marketplace
-        let listing = await createMarketItem(ownerAddress, minterContract, marketContract, price, tokenId);
-
-        console.log(listing)
+        await createMarketItem(minterContract, marketContract, price, tokenId);
   
       } catch (error) {
         console.log("Error listing NFT: ", error);
@@ -84,7 +91,7 @@ export const getNfts = async (minterContract) => {
         const owner = await fetchNftOwner(minterContract, i);
         resolve({
           index: i,
-          owner,
+          owner: owner,
           name: meta.data.name,
           image: meta.data.image,
           description: meta.data.description
@@ -129,14 +136,14 @@ export const fetchNftContractOwner = async (minterContract) => {
 };
 
 // List NFT in the marketplace
-export const createMarketItem = async (address, minterContract, marketContract, price, tokenId) => {
+export const createMarketItem = async (minterContract, marketContract, price, tokenId) => {
   try {
-
-    console.log(price)
+    console.log(price);
+    console.log(tokenId);
     // allows marketplace to trade the user NFTs
-    await minterContract.setApprovalForAll(marketAddress, true).send({ from: address })
+    await minterContract.setApprovalForAll(marketAddress, true);
     // creates the NFT item in the marketplace contract
-    let owner = await marketContract.listItem(nftAddress, tokenId, price);
+    let owner = await marketContract.listItem(nftAddress, tokenId, 1);
     return owner;
   } catch (e) {
     console.log({ e });

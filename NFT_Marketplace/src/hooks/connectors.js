@@ -14,6 +14,16 @@ const RPC_URLS = {
 	80001: process.env.ALCHEMY_URL
 };
 
+/*
+* 1 - ethereum mainnet
+* 3 - ropsten
+* 4 - rinkeby
+* 5 - goerli
+* 42 - kovan
+* 137 - polygon mainnet
+* 80001 - mumbai (polygon testnet)
+*/
+
 //metamask
 export const injected = new InjectedConnector({
 	supportedChainIds: [ 1, 3, 4, 5, 42, 137, 80001 ]

@@ -87,7 +87,7 @@ const mainnetGwei = 115;
       accounts: [process.env.PRIVATE_KEY],
     },
     mumbai: {
-      url: process.env.ALCHEMY_URL,
+      url: "https://matic-mumbai.chainstacklabs.com ",
       accounts: [process.env.PRIVATE_KEY],
     },
   },

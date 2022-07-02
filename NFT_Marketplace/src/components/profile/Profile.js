@@ -3,14 +3,13 @@ import PropTypes from "prop-types";
 import Nft from "../nfts/Card";
 import Loader from "../ui/Loader";
 import { Row } from "react-bootstrap";
-import axios from "axios";
-import {ethers} from "ethers";
 import { useWeb3React } from "@web3-react/core"
 import { RingLoader } from "react-spinners";
 import '../explore/Explore.css';
+import { getNfts } from '../../utils/minter'
 
 import { getContract } from '../../hooks/useContract';
-import { nftAbi, nftAddress, marketAbi, marketAddress } from "../../contracts";
+import { nftAbi, nftAddress } from "../../contracts";
 
 
 
@@ -19,7 +18,6 @@ const Profile = () => {
     const [nfts, setNfts] = useState([]);
     // check if NFTs are loaded or not
     const [loading, setLoading] = useState(false);
-    let marketContract;
     let minterContract;
 
      //connector, library, chainId, account, activate, deactivate
@@ -27,58 +25,19 @@ const Profile = () => {
 
     const getAssets = useCallback(async () => {
       try {
-          if (!web3reactContext.account) return (
-            <div className="nonfts-div">
-                {<RingLoader color={"green"} size={150} />}
-                <span className="nonfts-text">No NFTs yet <br /> Create one to display</span>
-            </div>
-          );
-          // create marketplace contract abstraction
-          const marketContract = getContract(web3reactContext.library, web3reactContext.account, marketAddress, marketAbi['abi']);
+          if (!web3reactContext.account) return;
           // create NFT contract abstraction
           const minterContract = getContract(web3reactContext.library, web3reactContext.account, nftAddress, nftAbi['abi']);
           // sets loading to true so it displays react animation while NFTs load
           setLoading(true);
-          // calls fetchMarketItems from marketplace contract to get info from all the items
-          const data = await marketContract.getListing(nftAddress, 0);
-          if (!data) return;
-          // map through all items
-          const items = await Promise.all(data.map(async marketItem => {
-              console.log(marketItem)
-              // gets the tokenId for each market item
-              const tokenId = Number(marketItem.tokenId);
-              // gets tokenURI for each market item
-              const tokenURI = await minterContract.tokenURI(tokenId);
-              // get the address of NFT owner (used to filter out NFTs that are not owned by user)
-              const seller = marketItem.seller;
-              // get NFT metadata
-              const meta = await axios.get(tokenURI);
-              // get price and convert unit to ether
-              let price = ethers.utils.formatUnits(marketItem.price, 'ether');
 
-              // return an object with all item info needed for other functions
-              return {
-                  image: meta.data.image,
-                  description: meta.data.description,
-                  externalUrl: meta.data.externalUrl,
-                  seller: seller,
-                  name: meta.data.name,
-                  price: price,
-                  tokenURI: tokenURI,
-                  tokenId: tokenId,
-                  itemId: marketItem.itemId,
-              }
-          }))
-          if (!items) return;
-          // filters all items to return only items owned by user
-          const profileItems = await items.filter(nft => {return web3reactContext.account.toLowerCase() === nft.seller.toLowerCase()})
-          // maps through filtered items and sets relist property to true for all of them,
-          // so it´s possible to display the relist button later on
-          await profileItems.map(nft => nft['relist'] = true)
-          console.log(profileItems)
+          const all_nfts = await getNfts(minterContract);
+
+          const userNfts = all_nfts.filter(e => e.owner.toLowerCase() === web3reactContext.account.toLowerCase());
+          
+          if (!userNfts) return;
           // sets nft list to be the filtered items
-          setNfts(profileItems);
-            
+          setNfts(userNfts);
         } catch (error) {
           console.log({ error });
         } finally {
@@ -94,7 +53,7 @@ const Profile = () => {
         } catch (error) {
           console.log({ error });
         }
-      }, [getAssets, minterContract, marketContract]);
+      }, [getAssets, minterContract]);
 
     return (
         <div className="explore-section">
