@@ -1,7 +1,7 @@
 {
   "name": "vms-marketplace",
   "version": "0.1.0",
-  "homepage": "https://vitormscolari.github.io/VMS_Marketplace_polygon/",
+  "homepage": "https://vitormscolari.github.io/VMS_Marketplace/",
   "private": true,
   "dependencies": {
     "@metamask/jazzicon": "^2.0.0",
