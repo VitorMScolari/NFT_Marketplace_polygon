@@ -1,0 +1,35 @@
+{
+  "files": {
+    "main.css": "/VMS_Marketplace_polygon/static/css/main.3a28ce46.chunk.css",
+    "main.js": "/VMS_Marketplace_polygon/static/js/main.ce71da72.chunk.js",
+    "main.js.map": "/VMS_Marketplace_polygon/static/js/main.ce71da72.chunk.js.map",
+    "runtime-main.js": "/VMS_Marketplace_polygon/static/js/runtime-main.72cebf74.js",
+    "runtime-main.js.map": "/VMS_Marketplace_polygon/static/js/runtime-main.72cebf74.js.map",
+    "static/css/2.37f677bb.chunk.css": "/VMS_Marketplace_polygon/static/css/2.37f677bb.chunk.css",
+    "static/js/2.9fc0315a.chunk.js": "/VMS_Marketplace_polygon/static/js/2.9fc0315a.chunk.js",
+    "static/js/2.9fc0315a.chunk.js.map": "/VMS_Marketplace_polygon/static/js/2.9fc0315a.chunk.js.map",
+    "static/js/3.50273a35.chunk.js": "/VMS_Marketplace_polygon/static/js/3.50273a35.chunk.js",
+    "static/js/3.50273a35.chunk.js.map": "/VMS_Marketplace_polygon/static/js/3.50273a35.chunk.js.map",
+    "static/js/4.fa6e5cc2.chunk.js": "/VMS_Marketplace_polygon/static/js/4.fa6e5cc2.chunk.js",
+    "static/js/4.fa6e5cc2.chunk.js.map": "/VMS_Marketplace_polygon/static/js/4.fa6e5cc2.chunk.js.map",
+    "static/js/5.3c48063d.chunk.js": "/VMS_Marketplace_polygon/static/js/5.3c48063d.chunk.js",
+    "static/js/5.3c48063d.chunk.js.map": "/VMS_Marketplace_polygon/static/js/5.3c48063d.chunk.js.map",
+    "static/js/6.4aec6166.chunk.js": "/VMS_Marketplace_polygon/static/js/6.4aec6166.chunk.js",
+    "static/js/6.4aec6166.chunk.js.map": "/VMS_Marketplace_polygon/static/js/6.4aec6166.chunk.js.map",
+    "static/js/7.ca1496f6.chunk.js": "/VMS_Marketplace_polygon/static/js/7.ca1496f6.chunk.js",
+    "static/js/7.ca1496f6.chunk.js.map": "/VMS_Marketplace_polygon/static/js/7.ca1496f6.chunk.js.map",
+    "index.html": "/VMS_Marketplace_polygon/index.html",
+    "static/css/2.37f677bb.chunk.css.map": "/VMS_Marketplace_polygon/static/css/2.37f677bb.chunk.css.map",
+    "static/css/main.3a28ce46.chunk.css.map": "/VMS_Marketplace_polygon/static/css/main.3a28ce46.chunk.css.map",
+    "static/js/2.9fc0315a.chunk.js.LICENSE.txt": "/VMS_Marketplace_polygon/static/js/2.9fc0315a.chunk.js.LICENSE.txt",
+    "static/js/3.50273a35.chunk.js.LICENSE.txt": "/VMS_Marketplace_polygon/static/js/3.50273a35.chunk.js.LICENSE.txt",
+    "static/media/bootstrap-icons.css": "/VMS_Marketplace_polygon/static/media/bootstrap-icons.f2539a50.woff2"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.72cebf74.js",
+    "static/css/2.37f677bb.chunk.css",
+    "static/js/2.9fc0315a.chunk.js",
+    "static/css/main.3a28ce46.chunk.css",
+    "static/js/main.ce71da72.chunk.js"
+  ]
+}
